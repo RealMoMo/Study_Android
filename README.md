@@ -11,6 +11,8 @@ RealMoMo
 
 --------------
 
+
+
 1.Android系统特性与平台架构（平台架构、系统架构、应用程序开发技术结构）
 
 系统特性：
@@ -118,16 +120,16 @@ Applications-->Application FrameWork-->Libraries(Android Runtime)-->Linux Kernel
 
 Activity生命周期
 
-   onCreate:   在这里创建界面 ，做一些数据 的初始化工作
-   onStart:    到这一步变成用户可见不可交互 的
-   onResume:   变成和用户可交互 的，（在activity 栈系统通过栈的方式管理这些个       
+   onCreate:   在这里创建界面 ，做一些数据的初始化工作
+   onStart:    到这一步变成用户可见不可交互的
+   onResume:   变成和用户可交互的，（在activity 栈系统通过栈的方式管理这些个       
                       Activity的最上面，运行完弹出栈，则回到上一个Activity)
-   onPause:     到这一步是可见但不可交互 的，系统会停止动画 等消耗CPU 的事情
+   onPause:     到这一步是可见但不可交互的，系统会停止动画等消耗CPU 的事情
                     从上文的描述已经知道，应该在这里保存你的一些数据,因为这个时候
                     你的程序的优先级降低，有可能被系统收回。在这里保存的数据，应该在
                     onResume里读出来，注意：这个方法里做的事情时间要短，因为下一
                     个activity不会等到这个方法完成才启动
-   onstop:     变得不可见 ，被下一个activity覆盖了
+   onStop:     变得不可见 ，被下一个activity覆盖了
    onDestroy: 这是activity被干掉前最后一个被调用方法了，可能是外面类调用finish方
                      法或者是系统为了节省空间将它暂时性的干掉，可以用isFinishing()来判
                      断它，如果你有一个Progress Dialog在线程中转动，请在onDestroy里 
@@ -231,7 +233,7 @@ registerReceiver(receiver, filter)
 
 
 
-intent
+intent 
 
 
 
@@ -336,11 +338,11 @@ public interface SharedPreferences {
 
 
 
-11.请介绍下ContentProvider是如何实现数据共享的。
+12.请介绍下ContentProvider是如何实现数据共享的。
 
 把自己的数据通过uri的形式共享出去
 
-android  系统下 不同程序 数据默认是不能共享访问
+android系统下不同程序 数据默认是不能共享访问
 
 需要去实现一个类去继承ContentProvider
 
@@ -365,7 +367,7 @@ delete(Uri, String, String[])
 }
 
 
-12.为什么要用ContentProvider？它和sql的实现上有什么差别？
+13.为什么要用ContentProvider？它和sql的实现上有什么差别？
 
 屏蔽数据存储的细节,对用户透明,用户只需要关心操作数据的uri就可以了
 不同app之间共享,操作数据
@@ -373,14 +375,14 @@ Sql也有增删改查的方法.
 但是contentprovider 还可以去增删改查本地文件. xml文件的读取更改,网络数据读取更改
 
 
-12.动画占用大量内存，如何优化？
+14.动画占用大量内存，如何优化？
 
 1.OOM问题：这个问题主要出现在帧动画中，当图片数量较多且图片较大时就极易出现OOM，这个在实际开发中要尤其注意，尽量避免使用帧动画。
 2.内存泄露：在属性动画中有一类无限循环的动画，这类动画需要在Activity退出时及时停止，否则将导致Activity无法释放从而造成内存泄露，通过验证后发现Tween动画并不存在此问题。
 
 
 
-13.Fragment跟Activity如何传值?
+15.Fragment跟Activity如何传值?
 
 
 1.静态加载的Fragment
@@ -388,17 +390,17 @@ Sql也有增删改查的方法.
 2.动态加载的Fragment
 
 
-14.Fragment的replace和add方法的区别,那什么时候用replace、add？
+16.Fragment的replace和add方法的区别,那什么时候用replace、add？
 
 
 
-15.Fragment的生命周期是怎么样的，跟Activity有什么关系？
+17.Fragment的生命周期是怎么样的，跟Activity有什么关系？
 
 Fragment是Activity的一个组件片段，也就是说他的生命周期是依赖于Activity的，但是它比Activity多了几个生命步骤，首先onAttach当fragment加入Activity的时候调用，然后是onCreate进行启动Activity，接着是onCreateView进行绘制View，一般的View就是这里绘制的，然后是onActivityCreated，接着跟Activity的生命周期差不多，调用onStart和onResume,然后是onPause,onStop,如果这个时候需要回收Fragment的时候，就会调用，接着是onDestoryView销毁布局，然后是onDestory和onDetach完成。
 
 
 
-16.其他避免子线程更新UI异常的方法：
+18.其他避免子线程更新UI异常的方法：
 •	Activity.runOnUiThread(Runnable)
 •	View.post(Runnable)
 •	View.postDelayed(Runnable, long)
@@ -407,19 +409,19 @@ Fragment是Activity的一个组件片段，也就是说他的生命周期是依�
 
 
 
-17.什么是Handler
+19.什么是Handler?
 
 Handler是Android提供的用来更新UI的一套机制，也是一套消息处理机制，我们可以通过它发送消息，也可以通过它处理消息。
 
 
-18.为什么Android要设计Handler机制更新UI？
+20.为什么Android要设计Handler机制更新UI？
 
 最根本的目的就是解决多线程并发问题
 假设如果在一个Activity当中，有多个线程去更新UI，并且都没有加锁机制，那么会产生什么样的问题？（更新界面错乱）如果对更新UI的操作都进行加锁处理，又会产生什么样的问题？（性能下降）
 基于对以上目的的考虑，android给我们提供了一套更新UI的机制，我们只需遵循这样的机制，无需考虑多线程问题。
 
 
-19.Handler机制（Android的消息机制）？(画图以及对源码的理解)
+21.Handler机制（Android的消息机制）？(画图以及对源码的理解)
 
 Handler的机制需要MessageQueue、Looper和Message的支持。他们在消息机制中各扮演了不同的角色
 
@@ -430,7 +432,7 @@ Message：消息载体
 
 
 
-20.BroadCastReceiver 的生命周期（结合下面2段，自己总结来说）
+22.BroadCastReceiver 的生命周期（结合下面2段，自己总结来说）
 
 
 生命周期只有十秒左右，如果在 onReceive() 内做超过十秒内的事情，就会报ANR(Application No Response) 程序无响应的错误信息，如果需要完成一项比较耗时的工作 , 应该通过发送 Intent 给 Service, 由Service 来完成 . 这里不能使用子线程来解决 , 因为 BroadcastReceiver 的生命周期很短 , 子线程可能还没有结束BroadcastReceiver 就先结束了 .BroadcastReceiver 一旦结束 , 此时 BroadcastReceiver 的所在进程很容易在系统需要内存时被优先杀死 , 因为它属于空进程 ( 没有任何活动组件的进程 ). 如果它的宿主进程被杀死 , 那么正在工作的子线程也会被杀死 . 所以采用子线程来解决是不可靠的
@@ -443,32 +445,35 @@ Message：消息载体
 
 
 
-21.Android 引入广播机制的用意
+23.Android 引入广播机制的用意
 
-广播机制的用意：从程序内讲，引入广播，可以使各模块之间有时候是一种相互依存的关系，有时候又是一种补充关系，方便几大组件的信息和数据交互，这样系统就具有高度的可扩展性，容易与其它系统进行集成。 从程序与程序间讲，方便程序间互通消息。
+广播机制的用意：
+从程序内讲，引入广播，可以使各模块之间有时候是一种相互依存的关系，有时候又是一种补充关系，方便几大组件的信息和数据交互，这样系统就具有高度的可扩展性，容易与其它系统进行集成。 
+从程序与程序间讲，方便程序间互通消息。
 
 
-22.如何让自己的广播只让指定的 app 接收？
+24.如何让自己的广播只让指定的app接收？
 
 通过自定义广播权限来保护自己发出的广播。 在清单文件里receiver必须有这个权限才能收到广播。 首先，需要定义权限： 然后，声明权限： 这时接收者就能收到发送的广播。
 
 
-23.广播的优先级对无序广播生效吗?
+25.广播的优先级对无序广播生效吗?
 
 生效的
 
 
-24.动态注册的广播优先级谁高?
+26.动态注册的广播优先级谁高?
 
 谁先注册谁优先级高。
 
 
-25.如何判断当前 BroadcastReceiver 接收到的是有序广播还是无序广播?
+27.如何判断当前 BroadcastReceiver 接收到的是有序广播还是无序广播?
 
 在 BroadcastReceiver 类中 onReceive()方法中,可以调用 boolean b = isOrderedBroadcast();判断接收到的广播是否为有序广播。
 
 
-26.使用广播来更新界面是否合适？
+28.使用广播来更新界面是否合适？
+
 更新界面也分很多种情况，如果不是频繁地刷新，使用广播来做也是可以的。但对于较频繁地刷新动作，建议还是不要使用这种方式。广播的发送和接收是有一定的代价的，它的传输是通过Binder进程间通信机制来实现的（细心人会发现Intent是实现了Parcelable接口的），那么系统定会为了广播能顺利传递做一些进程间通信的准备。
 
 除此之外，还可能有其他的因素让广播发送和到达是不准时的（或者说接收是会延时）。曾经看到有人在论坛上抱怨发几个广播都卡，Google的工程师是怎么混饭吃的。
@@ -478,18 +483,19 @@ Message：消息载体
 整个过程从发送--ActivityManagerService--ReceiverDispatcher进行了两次Binder进程间通信，最后还要交到UI的消息队列，如果基中有一个消息的处理阻塞了UI，当然也会延迟你的onReceive的执行。
 
 
-26.知道Service吗，它有几种启动方式？
+29.知道Service吗，它有几种启动方式？
 Service是一个专门在后台处理长时间任务的Android组件，它没有UI。它有两种启动方式，startService和bindService。
 
-27.Service两种启动方式的区别?
+30.Service两种启动方式的区别?
 startService只是启动Service，启动它的组件（如Activity）和Service并没有关联，只有当Service调用stopSelf或者其他组件调用stopService服务才会终止。
 bindService方法启动Service，其他组件可以通过回调获取Service的代理对象和Service交互，而这两方也进行了绑定，当启动方销毁时，Service也会自动进行unBind操作，当发现所有绑定都进行了unBind时才会销毁Service。
 
-26.怎么启动Service？
+31.怎么启动Service？
 有两种启动方式，一种是通过startService进行启动，这个时候Service跟启动的Activity没有关联，只有当调用stopService的时候才会结束Service，他的生命周期是：onCreate->onStartCommand->Service Run ->stopService->onDestory();如果是通过bindService启动的，那么这个Service就跟启动他的进程有关了，这个时候如果启动他的进程销毁了，那么这个Service也紧跟着销毁了或者直接调用unBindService，生命周期是：onCreate->onBindService->Service Run->unBindService->onDestory.
 
 
-27.service是否在main thread中执行，service里面是否能执行耗时的操作？
+32.service是否在main thread中执行，service里面是否能执行耗时的操作？
+
 默认情况，如果没有service所运行的进程，Service和Activity是运行在当前app所在进程中的main thread里面
 service里面不能执行耗时的操作(网络请求，拷贝数据库，大文件)
 特殊情况，可以在清单文件中配置service所在的进程，让service在另外的进程中执行。
@@ -502,13 +508,13 @@ android:process=":remote"
 在Service中执行的耗时操作最多20秒，BroadcastReceiver是10秒，Activity是5秒。
 
 
-28.不用service，B页面为音乐播放，从A跳转到B，再返回，如何使音乐继续播放？
+33.不用service，B页面为音乐播放，从A跳转到B，再返回，如何使音乐继续播放？
 
  这个问题问的很山寨.默认不做任何处理,B里面的音乐都能播放.
 遇到问题, 可以随机应变,灵活发挥,多考虑些细节,比如说这个题就可以这样说,说说你对startActivityForResult的理解()
 A开启B的时候,用startActivityForResult()方法, B返回的时候把播放的状态信息返回给A ,A继续播放音乐. 
 
-29.说说IntentService
+34.说说IntentService
 
 IntentService简介
 IntentService是Service的子类，比普通的Service增加了额外的功能。先看Service本身存在的两个问题：
@@ -523,38 +529,71 @@ IntentService是Service的子类，比普通的Service增加了额外的功能�
 
 
 
-30.使用service创建线程和activity直接创建线程的区别
+35.使用service创建线程和activity直接创建线程的区别
 
 因为假如在Activity中创建子线程的话，当Activity销毁的时候，这个时候重新再调用该Activity就会重新走新的生命周期，这个时候就无法再重新获取到刚才的子线程，而且如果在一个Activity中创建子线程，另一个Activity也无法操作该子线程，但是Service就不一样，所有的Activity都可以和Service关联，即使是Activity被销毁了，只要再重新建立联系就好了，所以，一般后台任务都是通过Service去控制的。
 
 
-31.service与thread的区别
+36.service与thread的区别
 
 Service：Service 是android的一种机制，当它运行的时候如果是Local Service，那么对应的Service 是运行在主进程的 main 线程上的。如：onCreate，onStart 这些函数在被系统调用的时候都是在主进程的 main 线程上运行的。如果是Remote Service，那么对应的 Service 则是运行在独立进程的 main 线程上。
 
 Thread 是程序执行的最小单元，它是分配CPU的基本单位。可以用 Thread 来执行一些异步的操作。
 
-=================================
+
+37.AIDL的全称是什么?如何工作?能处理哪些类型的数据?
+
+AIDL全称Android Interface Definition Language（Android接口描述语言）是一种接口描述语言; 编译器可以通过aidl文件生成一段代码，通过预先定义的接口达到两个进程内部通信进程跨界访问对象的目的.AIDL的IPC的机制和COM或CORBA类似, 是基于接口的，但它是轻量级的。它使用代理类在客户端和实现层间传递值. 如果要使用AIDL, 需要完成2件事情: 1. 引入AIDL的相关类.; 2. 调用aidl产生的class.
+理论上, 参数可以传递基本数据类型和String, 还有就是Bundle的派生类, 不过在Eclipse中,目前的ADT不支持Bundle做为参数,
+具体实现步骤如下:
+1、创建AIDL文件, 在这个文件里面定义接口, 该接口定义了可供客户端访问的方法和属性。
+2、编译AIDL文件, 用Ant的话, 可能需要手动, 使用Eclipse plugin的话,可以根据adil文件自动生产java文件并编译, 不需要人为介入.
+3、在Java文件中, 实现AIDL中定义的接口. 编译器会根据AIDL接口, 产生一个JAVA接口。这个接口有一个名为Stub的内部抽象类，它继承扩展了接口并实现了远程调用需要的几个方法。接下来就需要自己去实现自定义的几个接口了.
+4、向客户端提供接口ITaskBinder, 如果写的是service，扩展该Service并重载onBind ()方法来返回一个实现上述接口的类的实例。
+5、在服务器端回调客户端的函数. 前提是当客户端获取的IBinder接口的时候,要去注册回调函数, 只有这样, 服务器端才知道该调用那些函数
+AIDL语法很简单,可以用来声明一个带一个或多个方法的接口，也可以传递参数和返回值。 由于远程调用的需要, 这些参数和返回值并不是任何类型.下面是些AIDL支持的数据类型:
+
+不需要import声明的简单Java编程语言类型(int,boolean等)
+String, CharSequence不需要特殊声明
+List, Map和Parcelables类型, 这些类型内所包含的数据成员也只能是简单数据类型, String等其他比支持的类型.
+(另外: 我没尝试Parcelables, 在Eclipse+ADT下编译不过, 或许以后会有所支持).
+实现接口时有几个原则:
+1.抛出的异常不要返回给调用者. 跨进程抛异常处理是不可取的.
+2.IPC调用是同步的。如果你知道一个IPC服务需要超过几毫秒的时间才能完成地话，你应该避免在Activity的主线程中调用。也就是IPC调用会挂起应用程序导致界面失去响应. 这种情况应该考虑单起一个线程来处理.
+3.不能在AIDL接口中声明静态属性。
+IPC的调用步骤:
+声明一个接口类型的变量，该接口类型在.aidl文件中定义。
+实现ServiceConnection。
+调用ApplicationContext.bindService(),并在ServiceConnection实现中进行传递.
+在ServiceConnection.onServiceConnected()实现中，你会接收一个IBinder实例(被调用的Service). 调用
+YourInterfaceName.Stub.asInterface((IBinder)service)将参数转换为YourInterface类型。
+调用接口中定义的方法。你总要检测到DeadObjectException异常，该异常在连接断开时被抛出。它只会被远程方法抛出。
+断开连接，调用接口实例中的ApplicationContext.unbindService()
+参考：http://buaadallas.blog.51cto.com/399160/372090
+aidl主要就是帮助我们完成了包装数据和解包的过程，并调用了transact过程，而用来传递的数据包我们就称为parcel
+
+AIDL: xxx.aidl->xxx.java,注册service
+
+用aidl定义需要被调用方法接口
+实现这些方法
+调用这些方法
 
 
-AIDL跨进程通信
 
-=================================
-
-
-27.使用图片缓存的原因
+38.使用图片缓存的原因
 提高用户体验：如果每次启动都从网络下载图片，势必会加载很慢，图片无法显示，或需要很久才能完全显示，用户体验及其不好
-节约流量：如果每次加载页面，甚至只是滑动控件浏览就会下载的话，会消耗很多流量，占用网络资源的同时，也会因为应用耗流量而用户数量级受到影响
+节约流量：如果每次加载页面，甚至只是滑动控件浏览就会下载的话，会消耗很多流量，占用网络资源的同时，也会因为应用耗流量而用户数量级受到影响。
 
-28.什么是三级缓存
+39.什么是三级缓存
 内存缓存：优先加载，速度最快
 本地缓存：次优先加载，速度较快
 网络缓存：最后加载，速度较慢
 
-LRUCache缓存策略
+另了解下LRUCache缓存策略
 
 
-29.二次采样分别是哪两次？每次采样的目的是什么
+40.二次采样分别是哪两次？每次采样的目的是什么？
+
 既然是二次采样，那当然要分为两步了，下面我们来说说每次采样的主要工作：
 1.第一次采样
 第一次采样我主要是想要获得图片的压缩比例，假如说我有一张图片是200*200，那么我想把这张图片的缩略图显示在一个50*50的ImageView上，那我的压缩比例应该为4，那么这个4应该怎么样来获得呢？这就是我们第一步的操作了，我先加载图片的边界到内存中，这个加载操作并不会耗费多少内存，加载到内存之后，我就可以获得这张图片的宽高参数，然后根据图片的宽高，再结合控件的宽高计算出缩放比例。
@@ -562,61 +601,13 @@ LRUCache缓存策略
 在第一次采样的基础上，我来进行二次采样。二次采样的时候，我把第一次采样后算出来的结果作为一个参数传递给第BitmapFactory，这样在加载图片的时候系统就不会将整张图片加载进来了，而是只会加载该图片的一张缩略图进来，这样不仅提高了加载速率，而且也极大的节省了内存，而且对于用户来说，他也不会有视觉上的差异。
 
 
-30.View中onTouch，onTouchEvent和onClick的执行顺序
+41.View中onTouch，onTouchEvent和onClick的执行顺序
 
 onTouch->onTouchEvent->onClick
 
 当一个View需要处理事件时，如果它设置了OnTouchListener，那么OnTouchListener的onTouch方法会被回调。
 这时事件如何处理还得看onTouch的返回值，如果返回false，则当前View的onTouchEvent方法会被调用；如果返回true，那么onTouchEvent方法将不会被调用。由此可见，给View设置的onTouchListener，其优先级比onTouchEvent要高。
 如果当前方法中设置了onClickListener，那么它的onClick方法会被调用。可以看出，常用的OnClickListener，其优先级别最低。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -632,7 +623,7 @@ Https与http的区别？
 5.HTTP 无需加密，而 HTTPS 对传输的数据进行加密
 6.HTTP 无需证书，而 HTTPS 需要认证证书
 
--------------
+
 
 HTPPS和HTTP的概念
 
@@ -640,7 +631,6 @@ HTTPS（全称：Hypertext Transfer Protocol over Secure Socket Layer），是�
 
 超文本传输协议 (HTTP-Hypertext transfer protocol) 是一种详细规定了浏览器和万维网服务器之间互相通信的规则，通过因特网传送万维网文档的数据传送协议。
 
----------------
 
 简介http、https、tcp、udp网络协议？ 
 TCP：是事先为所发送的数据开辟出连接好的通道，然后再进行数据发送；
@@ -652,13 +642,15 @@ HTTPS：使用了HTTP协议，提供了身份验证与加密通信方法，
 UDP：UDP则不为IP提供可靠性、流控或差错恢复功能，UDP对应的则是可靠性要求低、传输经济的应用。
 
 
-----------------
 
-下列对Android NDK的理解正确的是(abcd )A、 NDK是一系列工具的集合
+下列对Android NDK的理解正确的是(abcd )
+A、 NDK是一系列工具的集合
 B、 NDK 提供了一份稳定、功能有限的 API 头文件声明。
 C、 使 “Java+C” 的开发方式终于转正，成为官方支持的开发方式
 D、 NDK 将是 Android 平台支持 C 开发的开端
 
 
 
---------------
+ButterKnife原理
+ButterKnife对性能的影响很小，因为没有使用使用反射，而是使用的Annotation Processing Tool(APT),注解处理器，javac中用于编译时扫描和解析Java注解的工具。在编译阶段执行的，它的原理就是读入Java源代码，解析注解，然后生成新的Java代码。新生成的Java代码最后被编译成Java字节码，注解解析器不能改变读入的Java 类，比如不能加入或删除Java方法。
+
