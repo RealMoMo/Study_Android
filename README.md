@@ -292,19 +292,22 @@ http://blog.csdn.net/nugongahou110/article/details/47128125
 
 https://www.zhihu.com/question/19703384
 
-1.在adapter中的getView方法中尽量少使用逻辑
+1.使用convertView复用机制
 
-2.尽最大可能避免GC
+2.使用ViewHolder
 
-3.滑动的时候不加载图片
+3.在adapter中的getView方法中尽量少使用逻辑
 
-4.将ListView的scrollingCache和animateCache设置为false
+4.尽最大可能避免GC
 
-5.item的布局层级越少越好
+5.滑动的时候不加载图片
 
-6.使用ViewHolder
+6.将ListView的scrollingCache和animateCache设置为false
 
-7.分页加载
+7.item的布局层级越少越好
+
+8.分页加载
+
 
 
 
