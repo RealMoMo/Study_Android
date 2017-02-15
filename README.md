@@ -288,6 +288,10 @@ AsyncTask,是Android提供的轻量级的异步类,可以直接继承AsyncTask,�
 
 http://www.jianshu.com/p/3e22d53286ca
 
+http://blog.csdn.net/nugongahou110/article/details/47128125
+
+https://www.zhihu.com/question/19703384
+
 1.在adapter中的getView方法中尽量少使用逻辑
 
 2.尽最大可能避免GC
