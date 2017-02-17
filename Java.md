@@ -1,4 +1,315 @@
-JAVA基础 
+个人基础知识点梳理
+
+//面试坑人考点
+		
+		int i=128;
+		byte b=(byte)i; //i强制转换为byte类型，数据会溢出 最终等于-128
+		System.out.println(b);
+		//同理i=129 --> b=-127  
+		
+		//坑人考点2
+		
+		char c='a';
+		System.out.println(c+1); //c+1自动转换为int类型 最终等于98
+		char d=97;		
+		System.out.println(d);//输出d为a
+		
+		//面试常见考点1
+		//String类型是不是基本数据类型。 答案：不是，它是引用数据类型
+		String str1="abc"; 
+		String str2=new String("abc");
+		System.out.println(str1+"  "+str2);//输出的内容是一致的
+		boolean f=(str1==str2);
+		System.out.println(f);//flase,地址是不一致的
+		
+		//2.常见考点   ---》      + 字符串拼接符 ， 算数运算符
+		String str = "bui";
+		System.out.println(1 + 3 + str + str + 2 + 2);
+		
+		//经典面试题
+		int a = 8;
+		int b = (a++)+(++a)+(a*10);
+		//       8      10    100
+		System.out.println(b);
+		
+		//		经典面试题一：
+		int a,b; 
+		a = b = 100;
+		System.out.println(a); //100
+		System.out.println(b); //100
+		
+//		经典面试题二：
+		//下面的两种写法结果分别是？
+		short s1=1; 
+		//s1 =  s1+1; 会报错s1+1是int类型所以正确如下：
+		s1 = (short) (s1+1);//要强转
+		System.out.println(s1);
+		
+		short s2=1; 
+		s2+=1;  //对于+=Java会自动强转。对于s2+＝1，Java会转成s2 = (short)(s2+1)  
+		System.out.println(s2);		
+		// s+=1 <=> s =  (s的类型)(s+1)
+		
+		
+		
+		/**
+		 * 
+		 * ==
+		 * 基本数据类型（int）：判断值
+		 * 引用数据类型（String）：判断内存空间（地址）
+		 * int a=100;
+		 * int b=100;
+		 * boolean c=(a==b);//true
+		 * 
+		 * String str1="abc";
+		 * String str2="abc";
+		 * boolean d=(str1==str2);//true
+		 * 
+		 * String str3=new String("abc");
+		 * String str4=new String("abc");
+		 * boolean e=(str3==str4);//flase
+		 */
+		 
+		 
+		 	
+//		经典面试题一：
+		int x = 10;
+		int y = 10;
+
+		boolean flag = (x == y);
+		System.out.println(flag);
+		
+//		经典面试题二：
+		boolean b1 = true;
+		boolean b2 = false;
+
+		boolean b3 = (b1 == b2);
+		System.out.println(b3);//false
+
+		boolean b4 = (b1 = b2);
+		System.out.println(b4);//false
+		
+		
+		//	拓展1	
+	//	JAVA 只有无符号右移，没有 无符号左移<<< 
+	//	因为左移是在后面补0
+	//	而右移是在前面边补1或0
+	//	有无符号是取决于数的前面的第一位是0还是1
+	//	所以右移是会产生到底补1还是0的问题。
+	//	而左移始终是在右边补，不会产生符号问题。
+	//	所以没有必要无符号左移<<<。
+	//	无符号左移<<<和左移<<是一样的概念 
+	//------------------------------------
+	
+	//	拓展2
+	//	2进制 前面加0b或0B   0b11-->3
+	//	8进制 前面加0   	011-->9
+	//	16进制 前面加0x或0X   011-->17
+	
+	//	知识点1
+	//	获取控制台输入Scanner scan = new Scanner(System.in);   实例化对象
+	//			DataType className = scan.nextDateType();	
+	//			scan这个对象去调用了nextDateType()方法，nextDateType：允许用户在控制台输入,返回值DateType
+	//
+	//	
+	
+	//	知识点2
+	//	scan.close();
+	//	申明了名为scan的数据输入扫描仪（Scanner），从而获得了配置内存，
+	//	若结束时却没有关闭或释放该内存，而出现警告，只要用close()方法即可！
+	
+	//	知识点3
+	//	switch允许的判断值：byte 、 short 、 int 、 char 、String 、 enum(枚举)
+	
+	
+		//label
+		//不建议使用：会让逻辑看起来比较复杂，比较乱，没有条理性
+		//break label;可以跳出label循环
+		//continue label;可以退出现在的循环并继续执行label循环
+		// label可应用多重循环的跳出与跳过
+		
+		http: for( int i = 0; i < 3; i++){
+					for(int j = 0; j < 3; j++){
+						System.out.println("--i--"+i);
+						if( i == 1){
+							break http; //跳出http标签的循环体  即可以跳出多重循环
+						}
+					}
+			}
+			
+--------------
+
+		//Arrays.binarySearch  看看原码，返回是int类型
+		//若在数组找到num ，返回的是元素下标
+		//若没有找到，返回num插入数组位置的元素下标取负再减一			
+			
+		public static void main(String[] args) {
+		int[] is = {2,435,23,6,4,16,18,20,22,24,26,28};
+		
+		Arrays.sort(is);//用sort方法，进行排升序
+		for(int i : is){
+			System.out.println(i);
+		}
+		
+		int num = Arrays.binarySearch(is, 7);//3--》-2=-1 + -1    5--》 -3 = -2 -1
+		System.out.println(num);
+	}
+	
+}
+
+-------------
+
+/**
+	 * 类
+	 * 
+	 * 对象： 属性 +方法
+	 * 属性：对象的特征描述
+	 * 方法:对象具体的操作
+	 * 
+	 * 属性 --- 全局变量（也叫成员变量）：系统会给一个默认值
+	 * 方法 --- 局部变量
+	 * 
+	 * 
+	 * 默认值：
+	 * 	引用数据--null
+	 * 	整数类型--0
+	 * 	浮点型--0.0
+	 * 	char--u/0000空格
+	 * 	boolean--false
+	 * 
+	 * String name;
+	 * public String name;忽略掉了 [= "xxx"]
+	 * 
+	 * 全局变量作用域：所有的方法都能去使用
+	 * 局部变量作用域：方法本身
+	 * 
+	 * this :  1.   this.变量  --》调用的是全局变量
+	 * 		   2.   this.方法 --》调用本类的方法
+	 * 		   3.   this() --> 调用相应的构造方法（this（）且只能放在构造方法的第一句）
+	 * 
+	 * 
+	 * 访问修饰符：
+	 * 			private --》 修饰全局变量，变量私有化                  可通过get/set方法去访问该变量
+	 * 					--》 修饰的方法，不能通过对象去调用	
+	 * set方法
+	 * public void set+成员变量名(数据类型  参数){
+	 * 	this.成员变量名= 参数;
+	 * }
+	 * get方法
+	 * public 返回值类型 get+成员变量名(数据类型  参数){
+	 * 	return this.参数;
+	 * }
+	 * 
+	 * 
+	 * 构造方法：与类名相同的方法
+	 * 作用：变量初始化
+	 * 
+	 * {  ====代码块===  应用在初始化}
+	 * 
+	 *  方法的重载：
+	 * 		1.方法名相同
+	 * 		2.参数列表不同（内容、顺序）
+	 * 		3.与返回值/访问修饰符无关
+	 */
+
+-----------------
+
+	/**
+	 * 学习方法的重写
+	 * 
+	 * 重载：
+	 * 		1.同一类里
+	 * 		2.方法名相同
+	 * 		3.参数列表（个数或者类型）不同
+	 * 		4.与返回值、访问修饰符无关
+	 * 
+	 * 重写、复写:
+	 * 		当父类的方法无法满足子类的需求时，就需要重写。
+	 * 
+	 * 重写的规则：
+	 * 		1.在子父类关系中的子类
+	 * 		2.方法名相同
+	 * 		3.跟返回值有关
+	 * 		4.访问权限不能比父类的更严格
+	 * 		5.参数列表相同
+	 * 
+	 *   父类  -------子类
+	 *   private     public   可以
+	 *   public      private  不可以
+	 *   
+	 *   重载  --vs-- 重写
+	 * 
+	 */	
+
+-------------------
+
+		/**
+		 *  == : 比较的内存地址
+		 *  
+		 *  Object类的 -- equals： 比较两个对象是否相等
+		 *  String类的 -- equals： 比较两个字符串内容是否相等
+		 *  
+		 *  getClass():返回当前类的详细信息：属于哪个包的哪个类 class com.momo.test01.MyString
+		 *  
+		 *  hashCode
+		 *  
+		 *  com.momo.test01.MyString@1581593: getClass + hashCode
+		 */
+
+------------------		
+
+
+		/**
+		 * 了解接口
+		 * 一个人只能有一个亲爹，但是可以有多个干爹
+		 * 
+		 * 继承：子类只能继承一个父类
+		 * 
+		 * 接口的语法：
+		 * 
+		 *  	1.接口是一个特殊的“抽象类”
+				2.接口中的方法必须是抽象方法
+				3.接口中的所有方法默认添加public abstract
+				4.接口中可以定义属性，默认添加public static final
+					工作中通常会定义一个存放常量的接口
+				5.接口中不可以包含构造方法、代码块
+				6.接口可以定义内部类，内部类不会默认添加任何修饰符(忽略)
+				7.接口不能实例化，存在的意义就在于“实现”（除非该类为抽象类）
+					接口不是类，没有构造方法，所以不能被实例化
+				8.一个类可以实现多个接口!!!（重中之重）
+				9.实现接口的类也可以继承别的类
+				10.接口之间可以继承
+				
+				抽象类  -- vs -- 接口（模子）
+				
+				需求： 1.编写一个父类，要去强制子类实现方法，但是父类里又要有一些功能的方法---抽象类
+					  2.编写一个父类，要去强制子类实现方法 --- 接口
+				
+		 */ 
+		 
+		 
+---------------------
+
+
+		/**
+		 * final:
+		 * 
+		 * 修饰属性：常量 , 常量名都用大写 ps：PERSON_NAME , 内存位置：常量池、常量区
+		 * 
+		 * 修饰方法： 不能被重写，不希望子类去修改此方法的功能时
+		 * 
+		 * 修饰类：不能被继承，成为了最终版的类
+		 * 
+		 * final --vs-- static
+		 * 			
+		 */
+
+		 
+		 
+		 
+
+
+JAVA基础面试题 
 
 01 面向对象的基本特征有哪些？分别解释；
 ·面向对象的四大特征为：封装、继承、多态、抽象；
