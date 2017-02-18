@@ -305,7 +305,6 @@
 		 */
 		 
 		 
-		 
 ----------------------
 
 	/**
@@ -333,6 +332,386 @@
 	 * 		则不需要去创建该类，建议采用匿名内部类的方式，减少类的个数。
 	 * 
 	 */
+
+-----------------------
+
+java内存分析自己百度去。
+
+
+------------------------
+
+//		StringBuilder与StringBuffer的用法完全一致，
+//		唯一的区别是StringBuffer是线程安全的，而StringBuilder不是线程安全的。
+//		所以StringBuilder的性能要比StringBuffer要好。
+//		单线程推荐使用StringBuilder，
+//		多线程使用StringBuffer。
+
+-------------------------
+
+	/**
+	 * 
+	 * 基本数据类型包装类：
+	 * 
+	 * 装箱：基本数据类型 --> 对应的包装类
+	 * 拆箱：对应的包装类 --> 基本数据类型
+	 * 
+	 * 自动装箱：可以直接把一个基本数据类型赋值给包装类
+	 * 自动拆箱：可以直接把一个包装类对象，赋值给基本类型
+	 * 自动装箱/拆箱：必须在JDK1.5版本之后
+	 * 
+	 */
+	 
+	 
+	 package com.momo.pack;
+
+public class TestPackKnowledgePoint {
+
+	public static void main(String[] args) {
+
+		Integer i1 = 100;//实际是Integer i1 = Integer.valueOf(100);
+		Integer i2 = 100;
+		Integer i3 = 200;
+		Integer i4 = 200;
+
+		//Integer.valueOf源码如下：
+		//	    public static Integer valueOf(int i) {
+		//	        assert IntegerCache.high >= 127;
+		//	        if (i >= IntegerCache.low && i <= IntegerCache.high)
+		//	            return IntegerCache.cache[i + (-IntegerCache.low)];
+		//	        return new Integer(i);
+		//	    }
+		//		在通过valueOf方法创建Integer对象的时候，如果数值在[-128,127]之间。
+		//		便返回指向IntegerCache.cache中已经存在的对象的引用；否则创建一个新的Integer对象。
+
+		System.out.println(i1==i2);		//true
+		System.out.println(i3==i4);		//false
+
+		Double d1 = 100.0;
+		Double d2 = 100.0;
+		Double d3 = 200.0;
+		Double d4 = 200.0;
+
+		//	    public static Double valueOf(String s) throws NumberFormatException {
+		//	        return new Double(FloatingDecimal.readJavaFormatString(s).doubleValue());
+		//	    }
+
+		System.out.println(d1 == d2);	//false
+		System.out.println(d3 == d4);	//false
+
+
+		//		Integer Double为什么结果不一样。通俗说：在某个范围内的整型数值的个数是有限的，而浮点数却不是。
+
+		//	注意，Integer、Short、Byte、Character、Long这几个类的valueOf方法的实现是类似的。
+		//		　　　　　Double、Float的valueOf方法的实现是类似的。
+
+
+
+		Boolean b1 = false;
+		Boolean b2 = false;
+		Boolean b3 = true;
+		Boolean b4 = true;
+
+		System.out.println(b1==b2);		//true
+		System.out.println(b3==b4);		//true
+		
+		//	    public static Boolean valueOf(String s) {
+		//	        return toBoolean(s) ? TRUE : FALSE;
+		//	    }
+
+		//	    /**
+		//	     * The {@code Boolean} object corresponding to the primitive
+		//	     * value {@code true}.
+		//	     */
+		//	    public static final Boolean TRUE = new Boolean(true);
+		//
+		//	    /**
+		//	     * The {@code Boolean} object corresponding to the primitive
+		//	     * value {@code false}.
+		//	     */
+		//	    public static final Boolean FALSE = new Boolean(false);
+		
+		
+		System.out.println("==========next==============");
+		
+//		谈谈Integer i = new Integer(xxx)和Integer i =xxx;这两种方式的区别。
+//
+//		　　当然，这个题目属于比较宽泛类型的。但是要点一定要答上，总结一下主要有以下这两点区别：
+//		　　1）第一种方式不会触发自动装箱的过程；而第二种方式会触发；
+//		　　2）在执行效率和资源占用上的区别。第二种方式的执行效率和资源占用在一般性情况下要优于第一种情况（注意这并不是绝对的）。
+		
+			Integer a = 1;
+	        Integer b = 2;
+	        Integer c = 3;
+	        Integer d = 3;
+	        Integer e = 321;
+	        Integer f = 321;
+	        Long g = 3L;
+	        Long h = 2L;
+	         
+	        System.out.println(c==d);
+	        System.out.println(e==f);
+	        System.out.println(c==(a+b));
+	        System.out.println(c.equals(a+b));
+	        System.out.println(g==(a+b));
+	        System.out.println(g.equals(a+b));
+	        System.out.println(g.equals(a+h));
+		
+		/**
+		 * 当 "=="运算符的两个操作数都是 包装器类型的引用，则是比较指向的是否是同一个对象.
+		 * 而如果其中有一个操作数是表达式（即包含算术运算）则比较的是数值（即会触发自动拆箱的过程）。
+		 * 另外，对于包装器类型，equals方法并不会进行类型转换。
+		 * 
+		 * 第一个和第二个输出结果没有什么疑问。第三句由于  a+b包含了算术运算，
+		 * 因此会触发自动拆箱过程（会调用intValue方法），因此它们比较的是数值是否相等。
+		 * 而对于c.equals(a+b)会先触发自动拆箱过程，再触发自动装箱过程，也就是说a+b，
+		 * 会先各自调用intValue方法，得到了加法运算后的数值之后，便调用Integer.valueOf方法，再进行equals比较。
+		 * 同理对于后面的也是这样，不过要注意倒数第二个和最后一个输出的结果（如果数值是int类型的，
+		 * 装箱过程调用的是Integer.valueOf；如果是long类型的，装箱调用的Long.valueOf方法）。
+		 */
+		
+		
+		
+		
+	}
+}
+
+
+--------------------------
+
+//Java获取随机数的3种方法
+//方法1
+//(数据类型)(最小值+Math.random()*(最大值-最小值+1))
+//例:
+//(int)(1+Math.random()*(10-1+1))
+//从1到10的int型随数
+//方法2
+//获得随机数
+//for (int i=0;i<30;i++)
+//{System.out.println((int)(1+Math.random()*10));}
+//(int)(1+Math.random()*10)
+//通过java.Math包的random方法得到1-10的int随机数
+//公式是:最小值---最大值（整数）的随机数
+//（类型）最小值+Math.random()*最大值
+//方法3
+//Random ra =new Random();
+//for (int i=0;i<30;i++)
+//{System.out.println(ra.nextInt(10)+1);}
+//通过java.util包中的Random类的nextInt方法来得到1-10的int随机数
+// 
+//生成0到1之间的任意随机小数：
+//生成[0,d)区间的随机小数，d为任意正的小数，则只需要将nextDouble方法的返回值乘以d即可。
+//[n1，n2]
+//也就是 ra.nextDouble() * (n2-n1)+n1
+
+
+----------------------------
+
+
+集合自己百度
+
+-----------------------------
+异常：
+
+	/**
+	 * 错误(Error)：
+	 * JVM系统内部错误或资源耗尽等严重情况－属于JVM需要负担的责任这一类异常事件无法恢复或不可能捕获，
+	 * 将导致应用程序中断。
+	 * 
+	 * 解决方法：优化代码，使得Error错误几率减少
+	 * 
+	 * OutOfMemoryError：内存溢出
+	 * StackOverflowError:栈溢出
+	 */
+	 
+	 
+	 /**
+	 * Exception：异常
+	 * 其它因编程错误或偶然的外在因素导致的一般性问题。
+	 * 我们自身能处理的异常
+	 * 
+	 * 一般性异常：
+	 * RunTimeException：非受检异常--不要求强制处理异常
+	 * 
+	 */
+	 
+	 
+	/**
+	 * 
+	 * 异常机制：
+	 * 
+	 * 1.error（错误）:我们要尽可能的优化代码
+	 * 
+	 * 2.Excepton（异常）：编码不严禁
+	 * 		1.运行时异常RunTimeException -- 非受检性异常：java不要求强制处理异常
+	 * 		2.一般性异常-- 受检性异常：强制要求处理异常
+	 * 
+	 * 3.处理异常的方法：
+	 * 		1. try（发生异常的代码）-catch（捕获异常的类型和对象）{处理异常的代码}-多重catch -finally{总会被执行} 
+	 * 		2. throws ： 修饰方法（放在方法名后面） --- 抛出（多个）异常
+	 * 		3. throw  ：抛出单个异常
+	 * 
+	 * 4.自定义异常类
+	 * 
+	 * 用法：1.语法
+	 * 		 2.不建议自定义异常类
+	 * 
+	 * 工作中：try -catch  和  throws
+	 * 
+	 * 
+	 */
+	 
+----------------------
+
+
+file api比较简单 自己看
+
+----------------------
+
+IO流
+
+
+	/**
+	 * 1.字节流：
+	 * OutputStream 输出流：抽象类  --- write(写)
+	 * InputStream 输入流：抽象类  ---read(读)
+	 * 使用其子类 --- FileOutputStream FileInputStream
+	 * 
+		2.字符流
+			Reader --- Writer   抽象类
+			InputStreamReader --- OutputStreamWriter  转换流
+			FileReader --- FileWriter 文件字符流
+			BufferedReader --- BufferedWriter  字符缓冲流
+			
+			
+		3.对象流
+		
+		重要概念：序列化与反序列化
+		
+	
+		 * Serializable:序列换接口 --- 标记接口
+		 * 
+		 * 类结构
+		 * 
+		 * 欺骗JVM
+		 * 
+		 * transient:透明-->不把被修饰的属性写入的文件里
+		 * static修饰属性不能存入流中
+		 
+		 4.随机访问流
+		 RandomAccessFile
+		 
+		 了解其断点续传的功能
+		 
+		 5.标准流
+		 System.in  System.out
+		 
+		 6.打印流
+		 PrintStream  PrintWriter
+		 
+		 7.内存流
+		 ByteArrayOutputStream 
+		 经典考点：内存流关闭无效
+	 
+	 */
+
+------------------------
+
+线程
+
+	/**
+	 * 经典面试题：
+	 * 请问当我们编写一个单纯的main方法时，
+	 * 此时该程序是否为单线程的？为什么？
+	 * 	public static void main(String[] args) {
+		
+		System.out.println("HelloWorld!!!!");
+		
+		}	
+	 * 
+	 * 肯定是多线程的
+	 * 垃圾回收器
+	 * 
+	 */
+	 
+	 掌握多线程安全
+	 
+	 线程安全---加锁 
+	 *  （1）同步代码块
+	 *  （2）同步方法
+	 *  （3）对象的互斥锁----用Lock接口的实现类（常用ReentrantLock） ----Lock lock = new ReentrantLock();
+	 *  通过创建任务(Runnable)的方式应用锁
+	 *  通过集成Thread的方式应用同步锁
+	 *  分析加锁的关键点： 1.锁的范围   2. 锁对象是同一个对象
+	 *  Runnable方式和Thread实现同步锁的区别			那些需要static修饰
+	 
+	 
+	 	//总结：
+		//1.守护线程---为主线程默默服务的线程，当主线程执行接收，守护线程跟着结束
+		//2.线程池----优化线程的创建与结束； 3中线程池的使用方式：
+		   //2.1. 通过单线程方式创建线程池对象
+		   //2.2. 通过固定的线程数创建线程池对象
+		   //2.3. 通过创建缓冲线程池对象的方式去执行任务
+		//3.网络编程：（网络编程+IO+多线程）
+		   //3.1. 网络的层次模型结构（了解）7层---4层模型
+		   //3.2. 网络编程的3要素：ip、port、协议
+		//4.网络编程应用：了解INetAddress类、Tcp(socket)编程（非常重点）
+		//4.1. 熟悉TCP编程中ip、port的设置
+		//4.2. 熟悉服务器端监听、客户端建立连接的过程
+		//4.3. IO流在网络编程中的应用
+		
+		
+	/**
+	 * 
+	 * 1.服务器与客户端之间的数据传输
+	 *   1）服务器----指定一个socket进行监听客户端的连接请求
+	 *   2）客户端----连接成功后，给服务器发送信息--socket的write基础流发送、字符缓冲流发送
+	 *   3）服务器----接收客户端的数据---socket的read基础流接收、字符缓冲流接收
+	 *   4）通过多线程的方式，将服务器与客户端的收与发分开，实现流畅信息的发送与接收
+	 * 
+	 * 2. 聊天室程序的应用
+	 *   1）服务器----循环分配socket进行监听多个客户端的连接请求，并用集合存储服务器单独给每个客户端的线程
+	 *   2）客户端----将客户端的发送与接收线程分开，便于数据的传输
+	 *   3）客户端给服务器发送数据、那么服务器读取并转发给发送者、
+	 *    （群聊：转发给除自己以外的客户）、（私聊：转发给指定的客户）
+	 *   4）客户端的读取线程，将转发信息进行读取
+	 *   5）退出、关闭io流、socket通道；将退出信息转发给其他客户
+	 * 
+	 */
+	 
+	 
+----------------------
+
+XML解析
+DOM SAX PULL
+
+JSon解析
+
+json解析的3中方式：json gson JSON(FastJson) 
+		1.最基本的方式（jsonObject、jsonArray）
+		2.Gson的解析方式：实例化Gson对象，对象调用Fromjson、toJson
+		3.Fast的解析方法：通过JSON类调用parseObject、parseArray；toJsonString
+
+XML与json：
+ * XML：   可扩展的标记语言，主要用于存储数据
+ * json：轻量级数据交互格式，主要用于传输数据 
+ 
+ 
+----------------------
+
+正则表达式
+
+了解其规则即可
+
+----------------------
+
+SQL语句
+
+----------------------
+
+反射
+		
+		
+----------------------
 
 		 
 		 
